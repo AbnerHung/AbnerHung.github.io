@@ -594,11 +594,14 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                 var myname = "AbnerHung";
                 var profile = "AbnerHung@foxmail.com";
                 var usage = "payment";
-                
+                var wechat = "wxp://f2f0MzUNZEnlYXm0bVlwUIOClc0v6sgJ4kZjocYP0YXnTWg";
+                var alipay = "https://qr.alipay.com/fkx11657u2m1ywxshgf2y2b";
                 var multilingual = false;
                 var branding = false;
-                var title = "目前不支持";
-                
+                var title = "选择你的支付方式";
+                var subtitle = "跟随进一步的指示以向" + myname + "付款";
+                var qrcodeapi = "https://www.zhihu.com/qrcode?url=";
+                var gravatar_url = "https://gravatar.loli.net/avatar/";                
               </script>
             - |
               <meta
