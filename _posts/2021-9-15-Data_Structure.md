@@ -667,7 +667,7 @@ public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
 
 
 
-### 删除链表的倒数第N个节点
+### 19. 删除链表的倒数第N个节点
 
 给你一个链表，删除链表的倒数第 `n` 个结点，并且返回链表的头结点。
 
@@ -724,7 +724,7 @@ class Solution {
 
 
 
-### 反转链表
+### 206. 反转链表
 
 #### 代码实现
 
@@ -756,7 +756,7 @@ class Solution {
 }
 ```
 
-### 移除链表元素
+### 203. 移除链表元素
 
 给你一个链表的头节点 `head` 和一个整数 `val` ，请你删除链表中所有满足 `Node.val == val` 的节点，并返回 **新的头节点** 。
 
@@ -826,7 +826,7 @@ class Solution {
 }
 ```
 
-### 奇偶链表
+### 328. 奇偶链表
 
 #### LeetCode
 
@@ -1491,6 +1491,576 @@ class Solution {
 
 ## Stack
 
+![](https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/06/03/screen-shot-2018-06-02-at-203523.png)
+
+在 LIFO 数据结构中，将`首先处理添加到队列`中的`最新元素`。
+与队列不同，栈是一个 LIFO 数据结构。通常，插入操作在栈中被称作入栈 `push` 。与队列类似，总是`在堆栈的末尾添加一个新元素`。但是，删除操作，退栈 `pop` ，将始终`删除`队列中相对于它的`最后一个元素`。
+
+入栈与出栈
+
+![](https://pic.leetcode-cn.com/691e2a8cca120acb18e77379c7cd7eec3835c8c102d1c699303f50accd1e09df-%E5%87%BA%E5%85%A5%E6%A0%88.gif)
+
+栈的实现比队列容易。`动态数组`足以实现堆栈结构。
+
+```java
+// "static void main" must be defined in a public class.
+class MyStack {
+    private List<Integer> data;               // store elements
+    public MyStack() {
+        data = new ArrayList<>();
+    }
+    /** Insert an element into the stack. */
+    public void push(int x) {
+        data.add(x);
+    }
+    /** Checks whether the queue is empty or not. */
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+    /** Get the top item from the queue. */
+    public int top() {
+        return data.get(data.size() - 1);
+    }
+    /** Delete an element from the queue. Return true if the operation is successful. */
+    public boolean pop() {
+        if (isEmpty()) {
+            return false;
+        }
+        data.remove(data.size() - 1);
+        return true;
+    }
+};
+
+public class Main {
+    public static void main(String[] args) {
+        MyStack s = new MyStack();
+        s.push(1);
+        s.push(2);
+        s.push(3);
+        for (int i = 0; i < 4; ++i) {
+            if (!s.isEmpty()) {
+                System.out.println(s.top());
+            }
+            System.out.println(s.pop());
+        }
+    }
+}
+```
+
+使用库函数
+
+```java
+// "static void main" must be defined in a public class.
+public class Main {
+    public static void main(String[] args) {
+        // 1. Initialize a stack.
+        Stack<Integer> s = new Stack<>();
+        // 2. Push new element.
+        s.push(5);
+        s.push(13);
+        s.push(8);
+        s.push(6);
+        // 3. Check if stack is empty.
+        if (s.empty() == true) {
+            System.out.println("Stack is empty!");
+            return;
+        }
+        // 4. Pop an element.
+        s.pop();
+        // 5. Get the top element.
+        System.out.println("The top element is: " + s.peek());
+        // 6. Get the size of the stack.
+        System.out.println("The size is: " + s.size());
+    }
+}
+```
+
+
+
+### 最小栈
+
+#### LeetCode 155 Min Stack
+
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the `MinStack` class:
+
+- `MinStack()` initializes the stack object.
+- `void push(val)` pushes the element `val` onto the stack.
+- `void pop()` removes the element on the top of the stack.
+- `int top()` gets the top element of the stack.
+- `int getMin()` retrieves the minimum element in the stack.
+
+```
+Input
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+
+Explanation
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // return -3
+minStack.pop();
+minStack.top();    // return 0
+minStack.getMin(); // return -2
+```
+
+##### 代码实现
+
+自定义结点，加入min，再来模拟栈
+
+```java
+class MinStack {
+    private MyNode head;
+    /** initialize your data structure here. */
+    
+    public void push(int val) {
+        if(empty()){
+            head = new MyNode(val, val, null);
+            
+        }else{
+            head = new MyNode(val,Math.min(val,head.min),head);
+        }
+    }
+    
+    public void pop() {
+        if(empty()) throw new IllegalStateException("栈为空……");
+        head = head.next;
+    }
+    
+    public int top() {
+        if (empty()) throw new IllegalStateException("栈为空……");
+        return head.val;
+    }
+    
+    public int getMin() {
+        if(empty()) throw new IllegalStateException("栈为空……");
+        return head.min;
+    }
+
+    private boolean empty() {
+        return head == null;
+    }
+}
+
+class MyNode{
+    public int val;
+    public int min;//最小值
+    public MyNode next;
+
+    public MyNode(int val, int min, MyNode next) {
+        this.val = val;
+        this.min = min;
+        this.next = next;
+    }
+
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+```
+
+
+
+### 有效的括号
+
+#### LeetCode 20 Valid Parentheses
+
+Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
+
+An input string is valid if:
+
+1. Open brackets must be closed by the same type of brackets.
+2. Open brackets must be closed in the correct order.
+
+ 
+
+**Example 1:**
+
+```
+Input: s = "()"
+Output: true
+```
+
+**Example 2:**
+
+```
+Input: s = "()[]{}"
+Output: true
+```
+
+**Example 3:**
+
+```
+Input: s = "(]"
+Output: false
+```
+
+**Example 4:**
+
+```
+Input: s = "([)]"
+Output: false
+```
+
+**Example 5:**
+
+```
+Input: s = "{[]}"
+Output: true
+```
+
+ 
+
+**Constraints:**
+
+- `1 <= s.length <= 104`
+- `s` consists of parentheses only `'()[]{}'`.
+
+
+
+##### 代码实现
+
+一次遍历
+
+循环体内：遇到`(`存`)`，遇到`[`存`]`,遇到`{`存`}`, 栈空说明右边括号先与左边括号出现，直接  `return false` ；
+
+取出栈顶，如果当前符号不等于栈顶元素，说明匹配失败；否则可以抵消掉一组括号，继续；
+
+循环结束后：如果栈不为空，说明有只出现左括号未出现右括号与之抵消的，`return false`;
+
+最后`return true`
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        char a;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='('){
+                stack.push(')');
+                continue;
+            }
+            if(s.charAt(i)=='['){
+                stack.push(']');
+                continue;
+            }
+            if(s.charAt(i)=='{'){
+                stack.push('}');
+                continue;
+            }
+            if(stack.empty()){
+                return false;
+            }
+            a=stack.pop();
+            if(s.charAt(i)!=a){
+                return false;
+            }
+            
+        }
+        if(!stack.empty()){
+            return false;
+        }
+        return true;
+    }
+}
+```
+
+一个小优化，循环结束后可以直接`return stack.isEmpty();`
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        char a;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='('){
+                stack.push(')');
+                continue;
+            }
+            if(s.charAt(i)=='['){
+                stack.push(']');
+                continue;
+            }
+            if(s.charAt(i)=='{'){
+                stack.push('}');
+                continue;
+            }
+            if(stack.empty()){
+                return false;
+            }
+            a=stack.pop();
+            if(s.charAt(i)!=a){
+                return false;
+            }
+            
+        }
+        return stack.empty();
+    }
+}
+```
+
+
+
+
+
+### 每日温度
+
+#### LeetCode 739 Daily Temperatures
+
+Given an array of integers `temperatures` represents the daily temperatures, return *an array* `answer` *such that* `answer[i]` *is the number of days you have to wait after the* `ith` *day to get a warmer temperature*. If there is no future day for which this is possible, keep `answer[i] == 0` instead.
+
+ 
+
+**Example 1:**
+
+```
+Input: temperatures = [73,74,75,71,69,72,76,73]
+Output: [1,1,4,2,1,1,0,0]
+```
+
+**Example 2:**
+
+```
+Input: temperatures = [30,40,50,60]
+Output: [1,1,1,0]
+```
+
+**Example 3:**
+
+```
+Input: temperatures = [30,60,90]
+Output: [1,1,0]
+```
+
+ 
+
+**Constraints:**
+
+- `1 <= temperatures.length <= 105`
+- `30 <= temperatures[i] <= 100`
+
+##### 代码实现
+
+单调栈
+
+```java
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        Stack<Integer> stack = new Stack<>();
+        int[] ret = new int[temperatures.length];
+        for(int i=0;i<temperatures.length;i++){
+            while(!stack.empty()&&temperatures[i] > temperatures[stack.peek()]){
+                int temp = stack.pop();
+                ret[temp] = i - temp;
+            }
+            stack.push(i);
+        }
+        return ret;
+    }
+}
+```
+
+最优解：倒着来
+
+```java
+public int[] dailyTemperatures(int[] T) {
+        int[] res = new int[T.length];
+        //从后面开始查找
+        for (int i = res.length - 1; i >= 0; i--) {
+            int j = i + 1;
+            while (j < res.length) {
+                if (T[j] > T[i]) {
+                    //如果找到就停止while循环
+                    res[i] = j - i;
+                    break;
+                } else if (res[j] == 0) {
+                    //如果没找到，并且res[j]==0。说明第j个元素后面没有
+                    //比第j个元素大的值，因为这一步是第i个元素大于第j个元素的值，
+                    //那么很明显这后面就更没有大于第i个元素的值。直接终止while循环。
+                    break;
+                } else {
+                    //如果没找到，并且res[j]！=0说明第j个元素后面有比第j个元素大的值，
+                    //然后我们让j往后挪res[j]个单位，找到那个值，再和第i个元素比较
+                    j += res[j];
+                }
+            }
+        }
+        return res;
+    }
+```
+
+
+
+### 下一个更大元素 I
+
+#### LeetCode 496 Next Greater Element I
+
+The **next greater element** of some element `x` in an array is the **first greater** element that is **to the right** of `x` in the same array.
+
+You are given two **distinct 0-indexed** integer arrays `nums1` and `nums2`, where `nums1` is a subset of `nums2`.
+
+For each `0 <= i < nums1.length`, find the index `j` such that `nums1[i] == nums2[j]` and determine the **next greater element** of `nums2[j]` in `nums2`. If there is no next greater element, then the answer for this query is `-1`.
+
+Return *an array* `ans` *of length* `nums1.length` *such that* `ans[i]` *is the **next greater element** as described above.*
+
+ 
+
+**Example 1:**
+
+```
+Input: nums1 = [4,1,2], nums2 = [1,3,4,2]
+Output: [-1,3,-1]
+Explanation: The next greater element for each value of nums1 is as follows:
+- 4 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
+- 1 is underlined in nums2 = [1,3,4,2]. The next greater element is 3.
+- 2 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
+```
+
+**Example 2:**
+
+```
+Input: nums1 = [2,4], nums2 = [1,2,3,4]
+Output: [3,-1]
+Explanation: The next greater element for each value of nums1 is as follows:
+- 2 is underlined in nums2 = [1,2,3,4]. The next greater element is 3.
+- 4 is underlined in nums2 = [1,2,3,4]. There is no next greater element, so the answer is -1.
+```
+
+ 
+
+**Constraints:**
+
+- `1 <= nums1.length <= nums2.length <= 1000`
+- `0 <= nums1[i], nums2[i] <= 104`
+- All integers in `nums1` and `nums2` are **unique**.
+- All the integers of `nums1` also appear in `nums2`.
+
+##### 代码实现
+
+单调栈经典例题
+
+```java
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map<Integer,Integer> res = nextGreater(nums2);
+        int[] resores = new int[nums1.length];
+        for(int i =0;i<nums1.length;i++){
+            resores[i] = res.getOrDefault(nums1[i], -1);;
+        }
+        return resores;
+    }
+
+    private Map<Integer,Integer> nextGreater(int[] arr){
+        Stack<Integer> stack = new Stack<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0;i<arr.length;i++){
+            while(!stack.isEmpty() &&stack.peek() <arr[i]){
+                 map.put(stack.pop(), arr[i]);
+            }
+            stack.push(arr[i]);
+        }
+        return map;
+    }
+}
+```
+
+
+
+### 逆波兰表达式求值
+
+#### LeetCode 150 Evaluate Reverse Polish Notation
+
+Evaluate the value of an arithmetic expression in [Reverse Polish Notation](http://en.wikipedia.org/wiki/Reverse_Polish_notation).
+
+Valid operators are `+`, `-`, `*`, and `/`. Each operand may be an integer or another expression.
+
+**Note** that division between two integers should truncate toward zero.
+
+It is guaranteed that the given RPN expression is always valid. That means the expression would always evaluate to a result, and there will not be any division by zero operation.
+
+ 
+
+**Example 1:**
+
+```
+Input: tokens = ["2","1","+","3","*"]
+Output: 9
+Explanation: ((2 + 1) * 3) = 9
+```
+
+**Example 2:**
+
+```
+Input: tokens = ["4","13","5","/","+"]
+Output: 6
+Explanation: (4 + (13 / 5)) = 6
+```
+
+**Example 3:**
+
+```
+Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+Output: 22
+Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 17 + 5
+= 22
+```
+
+ 
+
+**Constraints:**
+
+- `1 <= tokens.length <= 104`
+- `tokens[i]` is either an operator: `"+"`, `"-"`, `"*"`, or `"/"`, or an integer in the range `[-200, 200]`.
+
+##### 代码实现
+
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for(String a:tokens){
+            if("+".equals(a)){
+                int x = stack.pop();
+                int y = stack.pop();
+                stack.push(x+y);
+            } else if("-".equals(a)){
+                int x = stack.pop();
+                int y = stack.pop();
+                stack.push(y-x);
+            } else if("*".equals(a)){
+                int x = stack.pop();
+                int y = stack.pop();
+                stack.push(x*y);
+            } else if("/".equals(a)){
+                int x = stack.pop();
+                int y = stack.pop();
+                stack.push(y/x);
+            } else{
+                stack.push(Integer.parseInt(a));
+            }
+        }
+        return stack.peek();
+    }
+}
+```
+
 
 
 
@@ -1998,6 +2568,265 @@ int BFS(Node root, Node target) {
 
 
 
+##### 代码实现
+
+DFS：
+
+```java
+class Solution {
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]=='1'){
+                    count++;
+                    dfs(grid,i,j);
+                }
+            }
+        }
+        return count;
+    }
+    public void dfs(char[][] grid,int i,int j){
+        if(i<0||j<0||i >= grid.length || j >= grid[0].length || grid[i][j] == '0'){
+            return;
+        }
+        grid[i][j] = '0';
+        dfs(grid,i+1,j);
+        dfs(grid,i,j+1);
+        dfs(grid,i-1,j);
+        dfs(grid,i,j-1);
+    }
+}
+```
+
+BFS:
+
+```java
+class Solution {
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]=='1'){
+                    count++;
+                    bfs(grid,i,j);
+                }
+            }
+        }
+        return count;
+    }
+    class MyNode {
+        int i, j;
+
+        public MyNode(int i, int j) {
+            this.i = i;
+            this.j = j;
+        }
+    } 
+
+    public void bfs(char[][] grid,int i,int j){
+        Queue<MyNode> queue = new LinkedBlockingQueue<>();
+        queue.offer(new MyNode(i, j));
+        while(queue.isEmpty()!=true){
+            for(int x=0;x<queue.size();x++){
+                MyNode fuck = queue.poll();
+                if(fuck.i<0||fuck.j<0||fuck.j>=grid[0].length||fuck.i>=grid.length||grid[fuck.i][fuck.j] == '0'){
+                    continue;
+                }
+                if(grid[fuck.i][fuck.j]=='1'){
+                    grid[fuck.i][fuck.j]='0';
+                    queue.offer(new MyNode(fuck.i,fuck.j+1));
+                    queue.offer(new MyNode(fuck.i+1,fuck.j));
+                    queue.offer(new MyNode(fuck.i,fuck.j-1));
+                    queue.offer(new MyNode(fuck.i-1,fuck.j));
+                }
+            }
+        }
+        
+    }
+}
+```
+
+
+
+### 打开转盘锁
+
+#### LeetCode 752 Open the Lock
+
+你有一个带有四个圆形拨轮的转盘锁。每个拨轮都有10个数字： '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' 。每个拨轮可以自由旋转：例如把 '9' 变为 '0'，'0' 变为 '9' 。每次旋转都只能旋转一个拨轮的一位数字。
+
+锁的初始数字为 '0000' ，一个代表四个拨轮的数字的字符串。
+
+列表 deadends 包含了一组死亡数字，一旦拨轮的数字和列表里的任何一个元素相同，这个锁将会被永久锁定，无法再被旋转。
+
+字符串 target 代表可以解锁的数字，你需要给出解锁需要的最小旋转次数，如果无论如何不能解锁，返回 -1 。
+
+ 
+
+示例 1:
+
+```
+输入：deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+输出：6
+解释：
+可能的移动序列为 "0000" -> "1000" -> "1100" -> "1200" -> "1201" -> "1202" -> "0202"。
+注意 "0000" -> "0001" -> "0002" -> "0102" -> "0202" 这样的序列是不能解锁的，
+因为当拨动到 "0102" 时这个锁就会被锁定。
+示例 2:
+输入: deadends = ["8888"], target = "0009"
+输出：1
+解释：
+把最后一位反向旋转一次即可 "0000" -> "0009"。
+示例 3:
+输入: deadends = ["8887","8889","8878","8898","8788","8988","7888","9888"], target = "8888"
+输出：-1
+解释：
+无法旋转到目标数字且不被锁定。
+示例 4:
+输入: deadends = ["0000"], target = "8888"
+输出：-1
+```
+
+##### 代码实现
+
+思路，利用队列实现广度优先遍历，找到匹配的字符串，返回深度
+
+```java
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        Set<String> visited = Stream.of(deadends).collect(Collectors.toSet());
+        Queue<String> queue = new LinkedList<>();
+        queue.offer("0000");
+        int step = 0;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            while(size-- >0){
+                String cur = queue.poll();
+                if (visited.contains(cur)){
+                    continue;
+                } 
+                if(cur.equals(target)){
+                    return step;
+                }
+                visited.add(cur);
+                for(int i=0; i<4; i++){
+                    char c = cur.charAt(i);
+                    String left = cur.substring(0,i) + (c == '0' ? 9 : c-'0'-1) +  cur.substring(i+1);
+                    String right = cur.substring(0,i) + (c == '9' ? 0 : c-'0'+1) +  cur.substring(i+1);
+                    if(!visited.contains(left)){
+                        queue.offer(left);
+                    }
+                    if(!visited.contains(right)){
+                        queue.offer(right);
+                    }
+                }
+            }
+            step++;
+        }
+        return -1;
+    }
+}
+```
+
+
+
+### 完全平方数
+
+#### LeetCode 279 Perfect Squares
+
+给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
+
+给你一个整数 n ，返回和为 n 的完全平方数的 最少数量 。
+
+完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。
+
+```
+输入：n = 12
+输出：3 
+解释：12 = 4 + 4 + 4
+```
+
+```
+输入：n = 13
+输出：2
+解释：13 = 4 + 9
+```
+
+##### 代码实现
+
+思路：BFS
+
+第一次尝试，直接BFS，超时；
+
+第二次尝试，剪枝，扩大了剪枝的范围，大于n不进入循环，大数还是超时；
+
+第三次，写了个visited集，减去数值相等的路径，通过
+
+另外，动态规划也可解
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+        if(n==1){
+            return 1;
+        }
+        queue.offer(0);
+        int cnt = 1;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            int result = 0;
+            while(size-- > 0){
+                int i = 1;
+                int cur = queue.poll();
+                result += cur;
+                while(result + square(i)<=n){
+                    if(result + square(i) == n){
+                        return cnt;
+                    }
+                    if(!visited.contains(result + square(i))){
+                        queue.offer(result + square(i));
+                        visited.add(result + square(i));
+                    }
+                    
+                    
+                    i++;
+                }
+                result = 0;
+            }
+            cnt++;
+        }
+        return cnt;
+    }
+    private int square(int n){
+        return n*n;
+    }
+}
+```
+
+动态规划
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n+1];
+        dp[0]=0;
+        for(int i=1;i<=n;i++){
+            dp[i] = i;
+            for(int j=0;j*j<=i;j++){
+                dp[i] = Math.min(dp[i],dp[i-j*j]+1);
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+
+
+
+
 
 
 ## binary-tree
@@ -2056,6 +2885,83 @@ AVL 树在实际中并没有太多的用途，可支持 O(log n) 的查找、插
 
 
 ## heap
+
+### 大顶堆
+
+- 根结点（亦称为堆顶）的关键字是堆里所有结点关键字中最大者，称为大顶堆。大根堆要求根节点的关键字既大于或等于左子树的关键字值，又大于或等于右子树的关键字值。
+
+- ![image-20211112170804282](https://gitee.com/niimi_sora/pic-upload/raw/master/pics/image-20211112170804282.png)
+
+- 下标运算：$\begin{cases}left=i\times2+1\\right=i\times2+2\\father=(i-1)/2\end{cases}$
+
+- 重要的两个函数：$heapInsert$和$heapify$
+
+- ```java
+   private static void heapInsert(int[] arr, int index) {
+          while(arr[index]>arr[(index-1)/2]) {
+              swap(arr,index,(index-1)/2);
+              index = (index-1)/2;
+          }
+      }
+  ```
+
+- ```java
+  private static void heapify(int[] arr, int index, int heapSize) {
+          int left = index*2+1;
+          while (left<heapSize) {
+              int largest = (left+1<heapSize && arr[left+1] > arr[left]) ? left+1 : left;
+              largest = arr[largest]>arr[index] ? largest:index;
+              if(largest==index) break;
+              swap(arr, largest, index);
+              index = largest;
+              left = index*2+1;
+          }
+      }
+  ```
+
+### HeapSort
+
+```java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        if(nums==null||nums.length<2) return nums; 
+        for(int i=0;i<nums.length;i++) {  //建立大顶堆
+            heapInsert(nums, i);
+        }
+        int heapSize = nums.length; //大顶堆的length
+        swap(nums,0,--heapSize);   //heapSize先减一表示大顶堆的最后一个元素，把最后一个元素和第0个元素互换位置
+        while(heapSize>0) {        //每次交换都使heapSize减一了，直到减到0，停止
+            heapify(nums, 0, heapSize);  //重新堆化（使改变后的数组变回大顶堆，即找到堆顶）
+            swap(nums,0,--heapSize);    //其实就是把最大的元素换到最后去了，并且让堆看不到它
+        }//堆空了（看不到任何元素了）说明每次将堆顶拿出来的操作做完了，数组也排好序了
+        return nums;
+    }
+    private static void heapInsert(int[] arr, int index) {
+        while(arr[index]>arr[(index-1)/2]) {   //这里要整除，不能写成右移的形式
+            swap(arr,index,(index-1)/2);       //如果插入的这个值大于它父亲的值，交换
+            index = (index-1)/2;               //坐标也换过去，继续往上窜，直到窜到顶或干不过它上一级了
+        }
+    }
+    private static void heapify(int[] arr, int index, int heapSize) {
+        int left = index*2+1;
+        while (left<heapSize) {               //左孩子存在，即孩子存在，进入循环
+            int largest = (left+1<heapSize && arr[left+1] > arr[left]) ? left+1 : left; //只有右孩子存在且右孩子值大于左孩子值的时候才将右孩子下标赋给largest
+            largest = arr[largest]>arr[index] ? largest:index;    //孩子种最大的和当前选定的比较
+            if(largest==index) break;                             //说明当前这个值更大，干过它孩子了，停止
+            swap(arr, largest, index);         //到这儿说明当前这个值没干过它孩子种最大的那个，和那个值互换位置
+            index = largest;    //注意：第一次写漏了，不只是要把left换成原来largest的left,自己的index也得换过去
+            left = index*2+1;   //把left换成当前新选定位置（值是原来的值，但是它位置换到它孩子那儿去了）的左孩子下标
+        }
+    }
+    private static void swap(int[] arr, int i, int j) {
+        if(i!=j) {             //避免同地址异或给置零了
+            arr[i] = arr[i]^arr[j];  //只要地址不同就能换，值是可以相同的
+            arr[j] = arr[i]^arr[j];
+            arr[i] = arr[i]^arr[j];
+        }
+    }
+}
+```
 
 
 
