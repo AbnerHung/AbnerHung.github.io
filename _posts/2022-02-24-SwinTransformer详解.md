@@ -27,7 +27,7 @@ tags:
 
 1. 使用分层结构，使得模型能灵活处理不同尺度的图片。
 
-   ![image-20220224191303395](https://s2.loli.net/2022/02/24/6tVnJGmuqQ9aFwO.png"图1")
+   ![image-20220224191303395](https://s2.loli.net/2022/02/24/6tVnJGmuqQ9aFwO.png)
 
    
 
@@ -53,7 +53,7 @@ tags:
 
 ### 整体结构
 
-![image-20220224193823861](https://s2.loli.net/2022/02/24/HJLlIS6fURaX39T.png"图2")
+![image-20220224193823861](https://s2.loli.net/2022/02/24/HJLlIS6fURaX39T.png)
 
 一共4个stage，每个stage由Patch Merging 和 Swin Transformer Block组成，逐stage缩小特征图分辨率，像CNN一样扩大感受野。
 
