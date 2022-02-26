@@ -148,11 +148,11 @@ defaults: # 将所有配置选项使用<https://jekyllrb.com/docs/configuration/
                   background-position: 0% 0%;
                   background-repeat: no-repeat;
                   background-attachment: fixed;
-                  background-image: url(https://ftp.bmp.ovh/imgs/2021/04/ad30bb3fb733c04f.png);
+                  // background-image: url(https://ftp.bmp.ovh/imgs/2021/04/ad30bb3fb733c04f.png);
                 }
                 @media (min-aspect-ratio: 2400/1850) {
                   .wrap {
-                    background-image: url(https://i.w3tt.com/2021/04/25/qxgRS.png);
+                    // background-image: url(https://i.w3tt.com/2021/04/25/qxgRS.png);
                   }
                 }
                 .sidebar-overlay #sidebar-checkbox:checked ~ .wrap {
